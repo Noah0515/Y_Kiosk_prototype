@@ -80,7 +80,7 @@ public class JwtTokenProvider {
         UserDetails userDetails = User.builder()
                 .username(userId)
                 .password("")
-                .roles(userType)
+                .roles(userType) // 여기서 사용자의 Role(ADMIN인지 NORMAL인지 등)을 설정함. 그러면 requestMatchers에서 확인가능.
                 .build();
 
         // authentication 생성 후 리턴

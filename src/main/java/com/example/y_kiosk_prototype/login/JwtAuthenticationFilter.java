@@ -23,9 +23,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter { // 매 요�
         // 쿠키에서 토큰 꺼내기
         if (token != null && jwtTokenProvider.validateToken(token)) {
 
-            Authentication authentication = jwtTokenProvider.getAuthentication(token);
+            Authentication authentication = jwtTokenProvider.getAuthentication(token); // 토큰의 신분증인 authentication을
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication); // 이렇게 저장함. 그러면 해당 요청(Thread)가 끝날때까지 확인 가능
 
         }
         filterChain.doFilter(request, response);
