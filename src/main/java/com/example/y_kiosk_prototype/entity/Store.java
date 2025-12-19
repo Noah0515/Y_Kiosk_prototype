@@ -1,0 +1,50 @@
+package com.example.y_kiosk_prototype.entity;
+
+import com.example.y_kiosk_prototype.data.StoreState;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Builder
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+public class Store {
+    @Id
+    private String storeId;
+
+    //private String userId;
+
+    private String storeName;
+
+    private String verifyCode;
+
+    @Enumerated(EnumType.STRING)
+    private StoreState state;
+
+    private Date create_date;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserInfo userInfo;
+
+    @Builder.Default
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "store", orphanRemoval = true)
+    private List<EmployeePosition> employeePositions = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "store", orphanRemoval = true)
+    private List<MenuGroup> menuGroups = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "store", orphanRemoval = true)
+    private List<Order> orders = new ArrayList<>();
+
+}
