@@ -7,17 +7,20 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
+@Slf4j
 @Component
 public class JwtTokenProvider {
     @Value("${jwt.secret-key}")
@@ -38,7 +41,7 @@ public class JwtTokenProvider {
     // 토큰 생성
     public String createAccessToken(UserInfo userInfo){
         // claims: jwt에 담을 정보
-        Claims claims = Jwts.claims().setAudience(userInfo.getUserId());
+        Claims claims = Jwts.claims().setSubject(userInfo.getUserId());
         claims.put("user_type", userInfo.getUserType());
         // 현재 시간
         Date now = new Date();
@@ -74,6 +77,8 @@ public class JwtTokenProvider {
 
         String userId = claims.getSubject();
         String userType = claims.get("user_type", String.class);
+
+        log.info("userId: {}, userType: {}", userId, userType);
 
         //Spring Security가 이해할 수 있는 userdetails 객체 생성
         //실제로는 db에서 정보를 가져와서 정석 --> 나중에 수정하자
