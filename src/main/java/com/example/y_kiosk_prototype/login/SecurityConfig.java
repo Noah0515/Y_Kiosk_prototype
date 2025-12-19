@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,6 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration  // 보안 설정 파일
 @EnableWebSecurity  // 보안 설정 파일
 @RequiredArgsConstructor
+@EnableMethodSecurity
 public class SecurityConfig {
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     private JwtTokenProvider jwtTokenProvider;
@@ -43,9 +46,11 @@ public class SecurityConfig {
                                 "/", "/main", "/css/**", "/js/**", "/image/**", "/login/**", "/oauth2/**", "/auth/callback/**", "/auth/error/**",
                                 "/api/auth/admin-login"
                         ).permitAll()
+                        /*
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // 관리자 전용 구역
                         .requestMatchers("/api/normal/**").hasRole("NORMAL") // 일반 사용자
                         .requestMatchers("/api/manager/**").hasRole("MANAGER") // 가게 manager 계정
+                         */
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
