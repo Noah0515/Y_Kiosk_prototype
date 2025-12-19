@@ -21,4 +21,9 @@ public class SocialLogin {
     @MapsId("userId")
     @JoinColumn(name = "user_id")
     private UserInfo userInfo;
+
+    @Override
+    public String toString() {
+        return "kakaoEmail: " + kakaoEmail + ", kakaoId: " + kakaoId;
+    }
 }

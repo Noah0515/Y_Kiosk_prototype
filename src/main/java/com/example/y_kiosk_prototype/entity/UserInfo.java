@@ -45,5 +45,8 @@ public class UserInfo {
         return this.name;
     }
 
-
+    @Override
+    public String toString() {
+        return "userId: " + userId + ", name: " + name + ", userType: " + userType + ", createAt: " + createAt;
+    }
 }
