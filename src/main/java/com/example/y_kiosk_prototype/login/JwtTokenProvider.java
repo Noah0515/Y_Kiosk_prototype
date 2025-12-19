@@ -36,10 +36,10 @@ public class JwtTokenProvider {
     }
 
     // 토큰 생성
-    public String createAccessToken(UserInfo user_info){
+    public String createAccessToken(UserInfo userInfo){
         // claims: jwt에 담을 정보
-        Claims claims = Jwts.claims().setAudience(user_info.getUserId());
-        claims.put("user_type", user_info.getUserType());
+        Claims claims = Jwts.claims().setAudience(userInfo.getUserId());
+        claims.put("user_type", userInfo.getUserType());
         // 현재 시간
         Date now = new Date();
 
@@ -52,11 +52,11 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String createRefreshToken(UserInfo user_info){
+    public String createRefreshToken(UserInfo userInfo){
         Date now = new Date();
 
         return Jwts.builder()
-                .setSubject(user_info.getUserId())  // 정보 설정
+                .setSubject(userInfo.getUserId())  // 정보 설정
                 .setIssuedAt(now)   // 토큰발행시간
                 .setExpiration(new Date(now.getTime() + refreshTokenExpirationMs))
                 .signWith(key, SignatureAlgorithm.HS256)    // 서명: key를 이용해 hs256으로 암호화
