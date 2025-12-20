@@ -11,6 +11,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Slf4j
 @Configuration  // 보안 설정 파일
@@ -24,7 +29,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         log.info("SecurityConfig : filterChain");
-        http.csrf(
+        http
+                // React를 쓰는 경우 추가하는 설정
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                // Spring boot만 쓸 때 설정
+                .csrf(
                 // 기존 보안 비활성화
                 csrf -> csrf.disable()) // csrf 비활성화
                 .formLogin(form -> form.disable())  // 기본 폼 로그인 비활성화
@@ -71,5 +80,25 @@ public class SecurityConfig {
 
         return http.build();
 
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        // 허용할 프론트엔드 주소
+        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // React 주소 허용(vite 기본 주소)
+        // 허용할 http 메소드
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        // 허용할 헤더 (인증 관견 헤더 등을 위해 다 허용)
+        configuration.setAllowedHeaders(List.of("*"));
+        // 쿠키 주고 받으려면 true로 해야됨
+        configuration.setAllowCredentials(true); // 쿠키 전송 허용 (중요!)
+        // URL 기반으로 설정을 관리하는 객체 생성
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        // 모든 경로(/**)에 위에서 만든 설정을 적용하겠다고 등록
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source; // 이제 이 소스가 필터에 적용됩니다.
     }
 }

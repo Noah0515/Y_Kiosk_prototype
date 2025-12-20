@@ -103,8 +103,11 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                 .build();
 
         response.addHeader("Set-Cookie", jwtCookie.toString());
+        // 기존 코드는 Spring boot로 다 하는 경우였음. 그래서 SpringBoot 서버로 redirect 해야됨.
+        //String targetUrl = request.getContextPath() + "/main"; // 인증이 끝난 후 사용자가 볼 메인 화면. Context Path(/YKiosk 설정해줘야되니까 추가함.)
 
-        String targetUrl = request.getContextPath() + "/main"; // 인증이 끝난 후 사용자가 볼 메인 화면. Context Path(/YKiosk 설정해줘야되니까 추가함.)
+        // React를 쓰게되는 경우 토큰을 다 발급 받고 React 서버로 redirect 하면 됨.
+        String targetUrl = "http://localhost:5173";
         // 만약 특정 위치에서 로그인을 시도하고 마지막 위치로 돌아간다면 targetUrl을 경우에 따라 바꿀 수 있도록
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
 
