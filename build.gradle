@@ -25,12 +25,28 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // 1. Spring Security (필수)
+    //    - /oauth2/... 엔드포인트를 자동으로 만드는 등 보안의 핵심
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // 2. OAuth 2.0 Client (필수)
+    //    - 카카오, 구글 등 외부 OAuth 2.0 서버와 통신하는 기능
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+    // 3. JWT (JJWT) 라이브러리 (필수)
+    //    - 서버가 직접 JWT를 생성하고 검증하기 위해 사용
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 }
 
 tasks.named('test') {
