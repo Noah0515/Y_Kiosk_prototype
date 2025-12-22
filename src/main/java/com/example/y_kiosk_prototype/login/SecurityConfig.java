@@ -65,7 +65,7 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception
                         // 인증이 안된 사람
                         .authenticationEntryPoint((request, response, authException) -> {
-                            response.sendRedirect("/login/required"); // 안내 페이지로 안내
+                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "UnAuthorized"); // 안내 페이지로 안내
                         })
                         // 권한 없는 사람(ADMIN, NORMAL 같은 ROLE을 다루는거)
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
