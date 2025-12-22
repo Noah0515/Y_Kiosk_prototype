@@ -1,5 +1,6 @@
 package com.example.y_kiosk_prototype.login;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -52,14 +53,13 @@ public class SecurityConfig {
                 //  url 별 권한 관리
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(   // 누구나
-                                "/", "/main", "/css/**", "/js/**", "/image/**", "/login/**", "/oauth2/**", "/auth/callback/**", "/auth/error/**",
+                                "/", "/main", "/css/**", "/js/**", "/image/**", "/api/**", "/login/**", "/oauth2/**", "/auth/callback/**", "/auth/error/**",
                                 "/api/auth/admin-login"
                         ).permitAll()
-                        /*
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN") // 관리자 전용 구역
-                        .requestMatchers("/api/normal/**").hasRole("NORMAL") // 일반 사용자
-                        .requestMatchers("/api/manager/**").hasRole("MANAGER") // 가게 manager 계정
-                         */
+                        //.requestMatchers("/api/user/**").hasAnyRole("NORMAL", "MANAAGER")
+                        //.requestMatchers("/api/admin/**").hasRole("ADMIN") // 관리자 전용 구역
+                        //.requestMatchers("/api/user/**").hasRole("NORMAL") // 일반 사용자
+                        //.requestMatchers("/api/user/**").hasRole("MANAGER") // 가게 manager 계정
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
@@ -89,7 +89,7 @@ public class SecurityConfig {
         // 허용할 프론트엔드 주소
         configuration.setAllowedOrigins(List.of("http://localhost:5173")); // React 주소 허용(vite 기본 주소)
         // 허용할 http 메소드
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         // 허용할 헤더 (인증 관견 헤더 등을 위해 다 허용)
         configuration.setAllowedHeaders(List.of("*"));
         // 쿠키 주고 받으려면 true로 해야됨
