@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Store {
     @Id
-    private String storeId;
+    private String storeId; // 16자리
 
     //private String userId;
 
@@ -27,7 +28,7 @@ public class Store {
     @Enumerated(EnumType.STRING)
     private StoreState state;
 
-    private Date create_date;
+    private LocalDate create_date;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
