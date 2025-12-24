@@ -4,9 +4,11 @@ import com.example.y_kiosk_prototype.data.StoreState;
 import com.example.y_kiosk_prototype.entity.Store;
 import com.example.y_kiosk_prototype.entity.UserInfo;
 import com.example.y_kiosk_prototype.generator.IdGenerator;
+import lombok.Getter;
 
 import java.time.LocalDate;
 
+@Getter
 public class StoreReqDto {
     private String storeName;
 
