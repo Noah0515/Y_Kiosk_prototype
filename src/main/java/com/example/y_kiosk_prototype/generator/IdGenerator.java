@@ -14,4 +14,8 @@ public class IdGenerator {
 
         return result;
     }
+
+    public int generateIntId(int range) {
+        return new Random().nextInt(range);
+    }
 }
