@@ -4,10 +4,14 @@ import com.example.y_kiosk_prototype.DTO.StoreReqDto;
 import com.example.y_kiosk_prototype.entity.Store;
 import com.example.y_kiosk_prototype.entity.UserInfo;
 import com.example.y_kiosk_prototype.repository.StoreRepository;
+import com.example.y_kiosk_prototype.repository.UserInfoRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -22,5 +26,19 @@ public class StoreService {
         log.info("Store {} created", store.getStoreId());
 
         return store;
+    }
+
+    public List<Store> findAllStoresByUserInfo(UserInfo userInfo) {
+        String userId = userInfo.getUserId();
+        List<Store> stores = storeRepository.findAllByUserInfo_UserId(userId);
+
+        log.info("stores number : {}", stores.size());
+        return stores;
+    }
+
+    public Store findStoreById(String storeId) {
+        Optional<Store> store = storeRepository.findById(storeId);
+
+        return store.orElse(null);
     }
 }
