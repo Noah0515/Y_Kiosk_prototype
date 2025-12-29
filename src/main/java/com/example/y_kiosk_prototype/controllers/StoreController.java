@@ -101,7 +101,7 @@ public class StoreController {
             log.warn("인증되지 않는 사용자의 접근");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        List<MenuGroup> menuGroups = menuService.getAllMenuGroupsByStoreId(storeInfoReqDto.getStoreId());
+        List<MenuGroup> menuGroups = menuService.findAllMenuGroupsByStoreId(storeInfoReqDto.getStoreId());
         log.info("menuGroups number: {}", menuGroups.size());
 
         List<MenuGroupResDto> responseMenuGroupResDtos = menuGroups.stream().map(MenuGroupResDto::from).toList();
