@@ -1,8 +1,11 @@
 package com.example.y_kiosk_prototype.service;
 
+import com.example.y_kiosk_prototype.DTO.MenuCategoryReqDto;
 import com.example.y_kiosk_prototype.DTO.MenuGroupReqDto;
+import com.example.y_kiosk_prototype.entity.MenuCategory;
 import com.example.y_kiosk_prototype.entity.MenuGroup;
 import com.example.y_kiosk_prototype.entity.Store;
+import com.example.y_kiosk_prototype.repository.MenuCategoryRepository;
 import com.example.y_kiosk_prototype.repository.MenuGroupRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +20,7 @@ import java.util.List;
 @Slf4j
 public class MenuService {
     private final MenuGroupRepository menuGroupRepository;
+    private final MenuCategoryRepository menuCategoryRepository;
     private final StoreService storeService;
 
 
@@ -36,5 +40,16 @@ public class MenuService {
 
         log.info("MenuGroups number{}", menuGroups.size());
         return menuGroups;
+    }
+
+    public MenuGroup findMenuGroupById(int menuGroupId) {
+        return menuGroupRepository.findMenuGroupByMenuGroupId(menuGroupId).orElse(null);
+    }
+
+    public MenuCategory createMenuCategory(MenuCategoryReqDto menuCategoryReqDto) {
+        MenuGroup menuGroup = findMenuGroupById(menuCategoryReqDto.getMenuGroupId());
+        MenuCategory menuCategory = menuCategoryReqDto.toEntity(menuGroup);
+        menuCategoryRepository.save(menuCategory);
+        return menuCategory;
     }
 }
