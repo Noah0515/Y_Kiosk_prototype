@@ -1,6 +1,7 @@
 package com.example.y_kiosk_prototype.controllers;
 
 import com.example.y_kiosk_prototype.DTO.*;
+import com.example.y_kiosk_prototype.entity.MenuCategory;
 import com.example.y_kiosk_prototype.entity.MenuGroup;
 import com.example.y_kiosk_prototype.entity.Store;
 import com.example.y_kiosk_prototype.entity.UserInfo;
@@ -105,5 +106,24 @@ public class StoreController {
 
         List<MenuGroupResDto> responseMenuGroupResDtos = menuGroups.stream().map(MenuGroupResDto::from).toList();
         return ResponseEntity.ok(responseMenuGroupResDtos);
+    }
+
+    @PreAuthorize("hasAnyRole('NORMAL', 'MANAGER')")
+    @PostMapping("/api/user/store/group/category/create")
+    public ResponseEntity<Integer> createCategory(@RequestBody MenuCategoryReqDto menuCategoryReqDto, Authentication authentication) {
+        if (authentication == null) {
+            log.warn("인증되지 않는 사용자의 접근");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        log.info("categoryName: {}", menuCategoryReqDto.getMenuCategoryName());
+        log.info("userDetails: {}", userDetails);
+
+        UserInfo userInfo = userService.findUserByUserId(userDetails.getUsername());
+
+        MenuCategory newMenuCategory = menuService.createMenuCategory(menuCategoryReqDto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(newMenuCategory.getMenuCategoryId());
     }
 }
