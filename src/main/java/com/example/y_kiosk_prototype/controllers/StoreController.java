@@ -47,4 +47,24 @@ public class StoreController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newStore.getStoreId());
     }
 
+    @PreAuthorize("hasAnyRole('NORMAL', 'MANAGER')")
+    @GetMapping("/api/user/store/list")
+    public ResponseEntity<List<StoreResDto>> getStoreList(Authentication authentication) {
+        log.info("getStoreList");
+        if (authentication == null) {
+            log.warn("인증되지 않는 사용자의 접근");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserInfo userInfo = userService.findUserByUserId(userDetails.getUsername());
+
+        List<Store> stores = storeService.findAllStoresByUserInfo(userInfo);
+        log.info("stores number: {}", stores.size());
+
+        List<StoreResDto> responseStoreResDtos = stores.stream().map(StoreResDto::from).toList();
+        return ResponseEntity.ok(responseStoreResDtos);
+    }
+
+
 }
