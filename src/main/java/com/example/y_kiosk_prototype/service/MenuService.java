@@ -34,7 +34,7 @@ public class MenuService {
         return menuGroup;
     }
 
-    public List<MenuGroup> getAllMenuGroupsByStoreId(String storeId) {
+    public List<MenuGroup> findAllMenuGroupsByStoreId(String storeId) {
         Store store = storeService.findStoreById(storeId);
         List<MenuGroup> menuGroups = menuGroupRepository.findAllByStore(store);
 
