@@ -52,4 +52,12 @@ public class MenuService {
         menuCategoryRepository.save(menuCategory);
         return menuCategory;
     }
+
+    public List<MenuCategory> findAllMenuCategoriesByMenuGroupId(int menuGroupId) {
+        MenuGroup menuGroup = findMenuGroupById(menuGroupId);
+        List<MenuCategory> menuCategories = menuCategoryRepository.findMenuCategoryByMenuGroup(menuGroup);
+        log.info("MenuCategories number{}", menuCategories.size());
+
+        return menuCategories;
+    }
 }
