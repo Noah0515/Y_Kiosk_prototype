@@ -67,4 +67,24 @@ public class StoreController {
     }
 
 
+    @PreAuthorize("hasAnyRole('NORMAL', 'MANAGER')")
+    @PostMapping("/api/user/store/group/create")
+    public ResponseEntity<Integer> createGroup(@RequestBody MenuGroupReqDto menuGroupReqDto, Authentication authentication) {
+        if (authentication == null) {
+            log.warn("인증되지 않는 사용자의 접근");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        log.info("groupName: {}", menuGroupReqDto.getGroupName());
+        log.info("userDetails: {}", userDetails);
+
+        UserInfo userInfo = userService.findUserByUserId(userDetails.getUsername());
+
+        MenuGroup newMenuGroup = menuService.createMenuGroup(menuGroupReqDto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(newMenuGroup.getMenuGroupId());
+    }
+
+
 }
