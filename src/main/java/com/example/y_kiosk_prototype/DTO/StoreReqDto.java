@@ -15,7 +15,7 @@ public class StoreReqDto {
     public Store toEntity(UserInfo userInfo) {
         IdGenerator idGenerator = new IdGenerator();
         return Store.builder()
-                .storeId(idGenerator.generateId(60))
+                .storeId(idGenerator.generateStringId(60))
                 .storeName(storeName)
                 .verifyCode(null)
                 .state(StoreState.CLOSED)
