@@ -1,8 +1,10 @@
 package com.example.y_kiosk_prototype.controllers;
 
-import com.example.y_kiosk_prototype.DTO.StoreReqDto;
+import com.example.y_kiosk_prototype.DTO.*;
+import com.example.y_kiosk_prototype.entity.MenuGroup;
 import com.example.y_kiosk_prototype.entity.Store;
 import com.example.y_kiosk_prototype.entity.UserInfo;
+import com.example.y_kiosk_prototype.service.MenuService;
 import com.example.y_kiosk_prototype.service.StoreService;
 import com.example.y_kiosk_prototype.service.UserService;
 import lombok.AllArgsConstructor;
@@ -15,12 +17,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @Slf4j
 public class StoreController {
     private final StoreService storeService;
     private final UserService userService;
+    private final MenuService menuService;
 
     @GetMapping("/store")
     @PreAuthorize("hasAnyRole('NORMAL', 'MANAGER')")
@@ -86,5 +92,18 @@ public class StoreController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newMenuGroup.getMenuGroupId());
     }
 
+    @PreAuthorize("hasAnyRole('NORMAL', 'MANAGER')")
+    @GetMapping("/api/user/store/group/list")
+    public ResponseEntity<List<MenuGroupResDto>> getGroupList(@ModelAttribute StoreInfoReqDto storeInfoReqDto, Authentication authentication) {
+        log.info("getMenuGroupList {}", storeInfoReqDto.getStoreId());
+        if (authentication == null) {
+            log.warn("인증되지 않는 사용자의 접근");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        List<MenuGroup> menuGroups = menuService.getAllMenuGroupsByStoreId(storeInfoReqDto.getStoreId());
+        log.info("menuGroups number: {}", menuGroups.size());
 
+        List<MenuGroupResDto> responseMenuGroupResDtos = menuGroups.stream().map(MenuGroupResDto::from).toList();
+        return ResponseEntity.ok(responseMenuGroupResDtos);
+    }
 }
