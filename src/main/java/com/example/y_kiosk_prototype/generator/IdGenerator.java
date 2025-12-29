@@ -4,7 +4,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class IdGenerator {
-    public String generateId(int length) {
+    public String generateStringId(int length) {
         String characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
         String result = new Random().ints(60, 0, characters.length())
