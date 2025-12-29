@@ -126,4 +126,19 @@ public class StoreController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(newMenuCategory.getMenuCategoryId());
     }
+
+    @PreAuthorize("hasAnyRole('NORMAL', 'MANAGER')")
+    @GetMapping("/api/user/store/group/category/list")
+    public ResponseEntity<List<MenuCategoryResDto>> getCategoryList(@ModelAttribute MenuGroupInfoReqDto menuGroupInfoReqDto, Authentication authentication) {
+        log.info("getCategoryList 메뉴 그룹 정보{}", menuGroupInfoReqDto.getMenuGroupId());
+        if (authentication == null) {
+            log.warn("인증되지 않는 사용자의 접근");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        List<MenuCategory> menuCategories = menuService.findAllMenuCategoriesByMenuGroupId(menuGroupInfoReqDto.getMenuGroupId());
+        log.info("menuCategories number: {}", menuCategories.size());
+
+        List<MenuCategoryResDto> responseMenuCategoryResDtos = menuCategories.stream().map(MenuCategoryResDto::from).toList();
+        return ResponseEntity.ok(responseMenuCategoryResDtos);
+    }
 }
