@@ -156,4 +156,19 @@ public class StoreController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(newMenu.getMenuId());
     }
+
+    @PreAuthorize("hasAnyRole('NORMAL', 'MANAGER')")
+    @GetMapping("/api/user/store/menu-list")
+    public ResponseEntity<StoreMenuDetailResDto> getStoreMenuList(@ModelAttribute StoreInfoReqDto storeInfoReqDto, Authentication authentication) {
+        log.info("getStoreMenuList 가게 정보{}", storeInfoReqDto.getStoreId());
+        if (authentication == null) {
+            log.warn("인증되지 않는 사용자의 접근");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        StoreMenuDetailResDto storeMenuDetailResDto = storeService.getFullStoreMenu(storeInfoReqDto.getStoreId());
+
+        log.info("storeMenuDetailResDto: {}", storeMenuDetailResDto);
+        return ResponseEntity.ok(storeMenuDetailResDto);
+    }git
 }
