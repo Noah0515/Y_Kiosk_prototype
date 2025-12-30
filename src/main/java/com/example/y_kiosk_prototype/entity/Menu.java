@@ -28,6 +28,8 @@ public class Menu {
     @Enumerated(EnumType.STRING)
     private MenuState menuState;
 
+    private String imageUrl;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_category_id")
