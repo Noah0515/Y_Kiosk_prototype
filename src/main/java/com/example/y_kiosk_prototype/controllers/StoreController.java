@@ -170,5 +170,5 @@ public class StoreController {
 
         log.info("storeMenuDetailResDto: {}", storeMenuDetailResDto);
         return ResponseEntity.ok(storeMenuDetailResDto);
-    }git
+    }
 }
