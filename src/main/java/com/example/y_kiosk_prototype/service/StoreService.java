@@ -1,5 +1,6 @@
 package com.example.y_kiosk_prototype.service;
 
+import com.example.y_kiosk_prototype.DTO.StoreMenuDetailResDto;
 import com.example.y_kiosk_prototype.DTO.StoreReqDto;
 import com.example.y_kiosk_prototype.entity.Store;
 import com.example.y_kiosk_prototype.entity.UserInfo;
@@ -8,6 +9,7 @@ import com.example.y_kiosk_prototype.repository.UserInfoRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
@@ -41,4 +43,12 @@ public class StoreService {
 
         return store.orElse(null);
     }
+
+    @Transactional(readOnly = true)
+    public StoreMenuDetailResDto getFullStoreMenu(String storeId) {
+        Store store = findStoreById(storeId);
+
+        return StoreMenuDetailResDto.from(store);
+    }
+
 }
