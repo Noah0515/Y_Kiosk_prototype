@@ -1,10 +1,7 @@
 package com.example.y_kiosk_prototype.controllers;
 
 import com.example.y_kiosk_prototype.DTO.*;
-import com.example.y_kiosk_prototype.entity.MenuCategory;
-import com.example.y_kiosk_prototype.entity.MenuGroup;
-import com.example.y_kiosk_prototype.entity.Store;
-import com.example.y_kiosk_prototype.entity.UserInfo;
+import com.example.y_kiosk_prototype.entity.*;
 import com.example.y_kiosk_prototype.service.MenuService;
 import com.example.y_kiosk_prototype.service.StoreService;
 import com.example.y_kiosk_prototype.service.UserService;
@@ -17,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -140,5 +138,22 @@ public class StoreController {
 
         List<MenuCategoryResDto> responseMenuCategoryResDtos = menuCategories.stream().map(MenuCategoryResDto::from).toList();
         return ResponseEntity.ok(responseMenuCategoryResDtos);
+    }
+
+    @PreAuthorize("hasAnyRole('NORMAL', 'MANAGER')")
+    @PostMapping("/api/user/store/group/category/menu/create")
+    public ResponseEntity<Integer> createMenu(@RequestPart("menuData") MenuReqDto menuReqDto, @RequestPart("image")MultipartFile image, Authentication authentication) {
+        if (authentication == null) {
+            log.warn("인증되지 않는 사용자의 접근");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        log.info("menuName: {}", menuReqDto.getMenuName());
+        log.info("userDetails: {}", userDetails);
+
+        Menu newMenu = menuService.createMenu(menuReqDto, image);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(newMenu.getMenuId());
     }
 }
