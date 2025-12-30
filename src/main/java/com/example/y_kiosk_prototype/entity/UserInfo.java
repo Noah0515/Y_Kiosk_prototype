@@ -27,10 +27,10 @@ public class UserInfo {
 
     private LocalDate createAt;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "userInfo", orphanRemoval = true, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "userInfo", orphanRemoval = true, optional = true)
     private UserAccount userAccount;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "userInfo", orphanRemoval = true, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "userInfo", orphanRemoval = true, optional = true)
     private SocialLogin socialLogin;
 
     @Builder.Default
