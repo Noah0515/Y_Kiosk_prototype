@@ -55,11 +55,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter { // 매 요�
                 }
             }
         }
-        /*
+
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            log.info("Bearer token: {}", bearerToken);
             return bearerToken.substring(7);
-        }*/
+        }
         return null;
     }
 }
