@@ -89,7 +89,7 @@ public class SecurityConfig {
         // 허용할 프론트엔드 주소
         configuration.setAllowedOrigins(List.of("http://localhost:5173")); // React 주소 허용(vite 기본 주소)
         // 허용할 http 메소드
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         // 허용할 헤더 (인증 관견 헤더 등을 위해 다 허용)
         configuration.setAllowedHeaders(List.of("*"));
         // 쿠키 주고 받으려면 true로 해야됨
