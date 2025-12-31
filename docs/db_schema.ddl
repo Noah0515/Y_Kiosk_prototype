@@ -1,5 +1,5 @@
-create database y_kiosk_system;
-use y_kiosk_system;
+create database YKiosk_system;
+use YKiosk_system;
 
 CREATE TABLE `user_info`
 (
@@ -31,7 +31,7 @@ CREATE TABLE `social_login`
 
 CREATE TABLE `store`
 (
-    `store_id`    CHAR(255) NOT NULL,
+    `store_id`    VARCHAR(255) NOT NULL,
     `user_id`    CHAR(255) NOT NULL,
     `store_name`    CHAR(20) NOT NULL,
     `verify_code`    CHAR(60) NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE `store`
 
 CREATE TABLE `employee_position`
 (
-    `store_id`    CHAR(255) NOT NULL,
+    `store_id`    VARCHAR(255) NOT NULL,
     `position`    INT NOT NULL,
     `position_name`    CHAR(20) NOT NULL,
     PRIMARY KEY (`store_id`, `position`),
@@ -53,7 +53,7 @@ CREATE TABLE `employee_position`
 CREATE TABLE `employee`
 (
     `user_id`           CHAR(255) NOT NULL,
-    `store_id`          CHAR(255) NOT NULL,
+    `store_id`          VARCHAR(255) NOT NULL,
     `position`          INT       NOT NULL,
     `employee_id`       CHAR(255) NOT NULL,
     `employee_nickname` CHAR(20)  NOT NULL,
@@ -64,7 +64,7 @@ CREATE TABLE `employee`
 
 CREATE TABLE `menu_group`
 (
-    `store_id`    CHAR(255) NOT NULL,
+    `store_id`    VARCHAR(255) NOT NULL,
     `menu_group_id`    INT NOT NULL,
     `menu_group_name`    CHAR(20) NOT NULL,
     PRIMARY KEY ( `menu_group_id` ),
@@ -114,10 +114,10 @@ CREATE TABLE `option_category`
 );
 
 
-CREATE TABLE `order`
+CREATE TABLE `orders`
 (
     `order_num`    INT NOT NULL,
-    `store_id`    CHAR(255) NOT NULL,
+    `store_id`    VARCHAR(255) NOT NULL,
     `menu_group_id`    INT NOT NULL,
     `order_state`    VARCHAR(20) NOT NULL,
     `order_time`    DATETIME NOT NULL,
@@ -133,9 +133,10 @@ CREATE TABLE `ordered_menu`
     `order_num`    INT NOT NULL,
     `menu_id`    INT NOT NULL,
     `order_time`    DATETIME NOT NULL,
-    `store_id`    CHAR(255) NOT NULL,
+    `store_id`    VARCHAR(255) NOT NULL,
+    `quantity`  INT NOT NULL,
     PRIMARY KEY ( `order_num`,`menu_id`,`order_time`,`store_id` ),
-    FOREIGN KEY (`order_num`, `order_time`, `store_id`) REFERENCES `order`(`order_num`, `order_time`, `store_id`),
+    FOREIGN KEY (`order_num`, `order_time`, `store_id`) REFERENCES `orders`(`order_num`, `order_time`, `store_id`),
     FOREIGN KEY (`menu_id`) REFERENCES `menu`(`menu_id`)
 
 );
@@ -150,7 +151,7 @@ CREATE TABLE `ordered_menu_option`
     `category_id`    INT NOT NULL,
     `option_content`    VARCHAR(20) NOT NULL,
     `order_time`    DATETIME NOT NULL,
-    `store_id`    CHAR(255) NOT NULL,
+    `store_id`    VARCHAR(255) NOT NULL,
     PRIMARY KEY ( `order_num`,`menu_id`, `cat_menu_id`, `order_time`,`store_id`, `option_id`, `category_id`),
     FOREIGN KEY (`order_num`, `menu_id`, `order_time`, `store_id`) REFERENCES `ordered_menu`(`order_num`, `menu_id`, `order_time`, `store_id`),
     FOREIGN KEY (`cat_menu_id`, `option_id`, `category_id`) REFERENCES `option_category`(`menu_id`, `option_id`, `category_id`)
