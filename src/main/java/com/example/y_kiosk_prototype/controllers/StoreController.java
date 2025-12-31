@@ -3,6 +3,7 @@ package com.example.y_kiosk_prototype.controllers;
 import com.example.y_kiosk_prototype.DTO.*;
 import com.example.y_kiosk_prototype.entity.*;
 import com.example.y_kiosk_prototype.service.MenuService;
+import com.example.y_kiosk_prototype.service.OrderService;
 import com.example.y_kiosk_prototype.service.StoreService;
 import com.example.y_kiosk_prototype.service.UserService;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,7 @@ public class StoreController {
     private final StoreService storeService;
     private final UserService userService;
     private final MenuService menuService;
+    private final OrderService orderService;
 
     @GetMapping("/store")
     @PreAuthorize("hasAnyRole('NORMAL', 'MANAGER')")
@@ -181,5 +183,20 @@ public class StoreController {
 
         // 2. 생성된 주문 번호를 클라이언트(안드로이드)에 반환
         return ResponseEntity.ok(orderNum);
+    }
+
+    @PreAuthorize("hasAnyRole('NORMAL', 'MANAGER')")
+    @GetMapping("api/user/store/menu/get-order")
+    public ResponseEntity<StoreOrderResDto> getStoreCurrentOrder(@ModelAttribute StoreInfoReqDto storeInfoReqDto, Authentication authentication) {
+        log.info("getStoreMenuList 가게 정보{}", storeInfoReqDto.getStoreId());
+        if (authentication == null) {
+            log.warn("인증되지 않는 사용자의 접근");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        StoreOrderResDto storeOrderResDto= orderService.getCurrentStoreOrder(storeInfoReqDto.getStoreId());
+
+        log.info("storeOrderResDto: {}", storeOrderResDto);
+        return ResponseEntity.ok(storeOrderResDto);
     }
 }
