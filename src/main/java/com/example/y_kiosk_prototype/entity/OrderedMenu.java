@@ -17,9 +17,11 @@ public class OrderedMenu {
     @EmbeddedId
     @AttributeOverrides({
             @AttributeOverride(name = "orderNum", column = @Column(name = "order_num")),
+            @AttributeOverride(name = "menuId", column = @Column(name = "menu_id")),
             @AttributeOverride(name = "orderTime", column = @Column(name = "order_time")),
             @AttributeOverride(name = "storeId", column = @Column(name = "store_id")),
-            @AttributeOverride(name = "menuId", column = @Column(name = "menu_id"))
+            // 💡 이 부분이 명시되어야 자식 엔티티가 이 컬럼을 찾을 수 있습니다!
+            @AttributeOverride(name = "orderedMenuSeq", column = @Column(name = "ordered_menu_seq"))
     })
     private OrderedMenuId orderedMenuId;
 
@@ -31,6 +33,12 @@ public class OrderedMenu {
             @JoinColumn(name = "store_id", insertable = false, updatable = false)
     })
     private Order order;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id", insertable = false, updatable = false) // insertable/updatable을 false로!
+// @MapsId("storeId") <--- 이걸 주석 처리하거나 지우세요.
+    private Store store;
+    private int quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id", insertable = false, updatable = false)

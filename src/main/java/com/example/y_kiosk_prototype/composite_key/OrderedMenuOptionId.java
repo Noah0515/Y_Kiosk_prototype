@@ -2,10 +2,7 @@ package com.example.y_kiosk_prototype.composite_key;
 
 import com.example.y_kiosk_prototype.entity.OptionCategory;
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -16,6 +13,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Getter
+@Setter
 public class OrderedMenuOptionId implements Serializable {
     private OrderedMenuId orderedMenuId;
     private OptionCategoryId optionCategoryId;

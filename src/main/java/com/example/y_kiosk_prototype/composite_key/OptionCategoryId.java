@@ -1,10 +1,7 @@
 package com.example.y_kiosk_prototype.composite_key;
 
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -14,6 +11,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Getter
+@Setter
 public class OptionCategoryId implements Serializable {
     private int menuId;
     private int optionId;

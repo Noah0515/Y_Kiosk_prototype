@@ -17,7 +17,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Store {
     @Id
-    private String storeId; // 16자리
+    @Column(name = "`store_id`", length = 255)
+    private String storeId; // 60자리
 
     //private String userId;
 

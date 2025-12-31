@@ -20,6 +20,7 @@ public class OrderedMenuId implements Serializable {
     private int menuId;
     private LocalDateTime orderTime;
     private String storeId;
+    private int orderedMenuSeq; // 👈 추가: 한 주문 내에서 메뉴들의 순번 (1, 2, 3...)
 
     public OrderedMenuId() {}
 
