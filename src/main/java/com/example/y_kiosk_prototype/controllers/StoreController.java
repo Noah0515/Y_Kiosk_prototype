@@ -171,4 +171,15 @@ public class StoreController {
         log.info("storeMenuDetailResDto: {}", storeMenuDetailResDto);
         return ResponseEntity.ok(storeMenuDetailResDto);
     }
+
+    @PreAuthorize("hasAnyRole('NORMAL', 'MANAGER')")
+    @PostMapping("api/user/store/menu/new-order")
+    public ResponseEntity<Integer> newOrder(@RequestBody OrderReqDto orderReqDto, Authentication authentication) {
+        // 1. 서비스 호출하여 주문 처리 및 주문 번호 생성
+        // (authentication 정보는 필요시 서비스에 넘겨 소유권 검증 등에 활용 가능)
+        int orderNum = menuService.placeOrder(orderReqDto);
+
+        // 2. 생성된 주문 번호를 클라이언트(안드로이드)에 반환
+        return ResponseEntity.ok(orderNum);
+    }
 }
