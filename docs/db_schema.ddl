@@ -121,7 +121,7 @@ CREATE TABLE `orders`
     `menu_group_id`    INT NOT NULL,
     `order_state`    VARCHAR(20) NOT NULL,
     `order_time`    DATETIME NOT NULL,
-    `version`   INT NOT NULL,
+    `version`   INT NOT NULL DEFAULT 0,
     PRIMARY KEY ( `order_num`,`order_time`,`store_id` ),
     FOREIGN KEY (`store_id`) REFERENCES `store`(`store_id`),
     FOREIGN KEY (`menu_group_id`) REFERENCES `menu_group`(`menu_group_id`)
@@ -134,8 +134,9 @@ CREATE TABLE `ordered_menu`
     `menu_id`    INT NOT NULL,
     `order_time`    DATETIME NOT NULL,
     `store_id`    VARCHAR(255) NOT NULL,
+    `ordered_menu_seq` INT NOT NULL, --
     `quantity`  INT NOT NULL,
-    PRIMARY KEY ( `order_num`,`menu_id`,`order_time`,`store_id` ),
+    PRIMARY KEY ( `order_num`,`menu_id`,`order_time`,`store_id`, `ordered_menu_seq`),
     FOREIGN KEY (`order_num`, `order_time`, `store_id`) REFERENCES `orders`(`order_num`, `order_time`, `store_id`),
     FOREIGN KEY (`menu_id`) REFERENCES `menu`(`menu_id`)
 
@@ -148,11 +149,12 @@ CREATE TABLE `ordered_menu_option`
     `menu_id`    INT NOT NULL,
     `cat_menu_id` INT NOT NULL,
     `option_id`    INT NOT NULL,
+    `ordered_menu_seq` INT NOT NULL, --
     `category_id`    INT NOT NULL,
     `option_content`    VARCHAR(20) NOT NULL,
     `order_time`    DATETIME NOT NULL,
     `store_id`    VARCHAR(255) NOT NULL,
-    PRIMARY KEY ( `order_num`,`menu_id`, `cat_menu_id`, `order_time`,`store_id`, `option_id`, `category_id`),
-    FOREIGN KEY (`order_num`, `menu_id`, `order_time`, `store_id`) REFERENCES `ordered_menu`(`order_num`, `menu_id`, `order_time`, `store_id`),
+    PRIMARY KEY ( `order_num`,`menu_id`, `cat_menu_id`, `order_time`,`store_id`, `ordered_menu_seq`, `option_id`, `category_id`),
+    FOREIGN KEY (`order_num`, `menu_id`, `order_time`, `store_id`, `ordered_menu_seq`) REFERENCES `ordered_menu`(`order_num`, `menu_id`, `order_time`, `store_id`, `ordered_menu_seq`),
     FOREIGN KEY (`cat_menu_id`, `option_id`, `category_id`) REFERENCES `option_category`(`menu_id`, `option_id`, `category_id`)
 );
